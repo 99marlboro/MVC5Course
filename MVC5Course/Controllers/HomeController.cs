@@ -15,12 +15,17 @@ namespace MVC5Course.Controllers
 
         public ActionResult About()
         {
+            //throw new Exception("AAA");
             // TODO:test
             ViewBag.Message = "Your application description page.";
             // HACK:中文
             return View();
 
            
+        }
+        public ActionResult Test()
+        {
+            return View();
         }
 
         public ActionResult Contact()
