@@ -12,12 +12,19 @@ namespace MVC5Course.Controllers
 {
     public class ProductsController : BaseController
     {
+
         //private FabricsEntities db = new FabricsEntities();
 
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index(int? productId, string type)
         {
-            var data = repo.All().Take(5).OrderByDescending(p => p.ProductId).ToList();
+            var data = repo.All().Take(10).OrderByDescending(p => p.ProductId).ToList();
+
+            ViewBag.type = type;
+            if (productId.HasValue)
+            {
+                ViewBag.SelectedProductId = productId.Value;
+            }
 
             ViewData.Model = data;
             return View();
@@ -40,6 +47,7 @@ namespace MVC5Course.Controllers
                     product.Stock = item.Stock;
                 }
                 repo.UnitOfWork.Commit();
+                TempData["ChangeMsg"] = "批次修改完成";
                 return RedirectToAction("Index");
             }
             var data = repo.All().Take(5).OrderByDescending(p => p.ProductId).ToList();
@@ -86,7 +94,7 @@ namespace MVC5Course.Controllers
                 //db.Product.Add(product);
                 //db.SaveChanges();
 
-                TempData["ProductCreatDoneMsg"] = "商品新增完成";
+                TempData["ChangeMsg"] = "商品新增完成";
 
                 return RedirectToAction("Index");
             }
@@ -117,14 +125,24 @@ namespace MVC5Course.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, FormCollection form)
         {
-            //[Bind(Include = "ProductId,ProductName,Price,Active,Stock")] Product product
-            var product = repo.Find(id);
-            if (TryUpdateModel<Product>(product, new string[]{
-                "ProductId","ProductName","Price","Active","Stock"}))
+            //改用介面
+            IProduct product = repo.Find(id);
+            if (TryUpdateModel<IProduct>(product))
             {
                 repo.UnitOfWork.Commit();
+                TempData["ChangeMsg"] = "商品編輯成功";
                 return RedirectToAction("Index");
             }
+
+
+            ////[Bind(Include = "ProductId,ProductName,Price,Active,Stock")] Product product
+            //var product = repo.Find(id);
+            //if (TryUpdateModel<Product>(product, new string[]{
+            //    "ProductId","ProductName","Price","Active","Stock"}))
+            //{
+            //    repo.UnitOfWork.Commit();
+            //    return RedirectToAction("Index");
+            //}
 
 
             //if (ModelState.IsValid)

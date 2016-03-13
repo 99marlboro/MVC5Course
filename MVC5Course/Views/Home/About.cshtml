@@ -1,7 +1,28 @@
 ﻿@{
     ViewBag.Title = "About";
+    if (IsAjax)
+    {
+        Layout = "";
+    } 
 }
+@section TopLinks {
+    <li><a href="/Home/About">@ViewBag.Title</a></li>
+}
+
+@*不建議使用*@
+@Html.ActionLink(" ", "Index", null, new { @class = "btn btn-primary", data_name = "Will" })
+@*建議使用*@
+<a href="@Url.Action("Index")" class="btn btn-primary" data-name="Will" ></a>
+
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
 <p>Use this area to provide additional information.</p>
+
+<h99>共執行: @ViewBag.執行時間  ms</h99>
+
+@section scripts {
+    <script>
+        console.log("ok");
+    </script>
+}

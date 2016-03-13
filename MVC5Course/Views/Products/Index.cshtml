@@ -1,18 +1,19 @@
-﻿@model IEnumerable<MVC5Course.Models.Product>
+﻿@model IEnumerable<Product>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Products";
 }
-
-<h2>Index</h2>
-
+@section TopLinks {
+    <li><a href="/Home/Products">@ViewBag.Title</a></li>
+}
+<h2>產品管理</h2>
 <p>
     @Html.ActionLink("新增產品", "Create")
 </p>
 
-@if (!string.IsNullOrEmpty(Convert.ToString(TempData["ProductCreatDoneMsg"])))
+@if (!string.IsNullOrEmpty(Convert.ToString(TempData["ChangeMsg"])))
 {
-    <h2>@TempData["ProductCreatDoneMsg"]</h2>
+    <h3 class="text-danger">@TempData["ChangeMsg"]</h3>
 }
 
 @using (Html.BeginForm())
@@ -34,35 +35,57 @@
             <th></th>
         </tr>
         @{
-            var Products = Model.ToArray();
+    var Products = Model.ToArray();
         }
 
         @for (int i = 0; i < Products.Length; i++)
         {
             @Html.HiddenFor(modelItem => Products[i].ProductId)
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => Products[i].ProductName)
-                </td>
-                <td>
-                    @Html.EditorFor(modelItem => Products[i].Price)<br />
-                    @Html.ValidationMessageFor(modelItem => Products[i].Price)
-                </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => date[i].Active)
-                </td>*@
-                <td>
-                    @Html.EditorFor(modelItem => Products[i].Stock)<br />
-                    @Html.ValidationMessageFor(modelItem => Products[i].Stock, "", new { @class = "text-danger" })
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = Products[i].ProductId }) |
-                    @Html.ActionLink("Details", "Details", new { id = Products[i].ProductId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = Products[i].ProductId })
-                </td>
-            </tr>
+            
+            if (ViewBag.SelectedProductId != null && ViewBag.SelectedProductId == Products[i].ProductId)
+            {
+                ViewBag.SelectedProductItem = Products[i];
+            }
+
+    <tr @if (ViewBag.SelectedProductId != null && ViewBag.SelectedProductId == Products[i].ProductId) { @Html.Raw("style='background-color: lightyellow;'")   }>
+        <td>
+            @Html.DisplayFor(modelItem => Products[i].ProductName)
+        </td>
+        <td>
+            @Html.EditorFor(modelItem => Products[i].Price)<br />
+            @Html.ValidationMessageFor(modelItem => Products[i].Price)
+        </td>
+        @*<td>
+                @Html.DisplayFor(modelItem => date[i].Active)
+            </td>*@
+        <td>
+            @Html.EditorFor(modelItem => Products[i].Stock)<br />
+            @Html.ValidationMessageFor(modelItem => Products[i].Stock, "", new { @class = "text-danger" })
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = Products[i].ProductId }) |
+            @Html.ActionLink("Details", "Details", new { id = Products[i].ProductId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = Products[i].ProductId }) |
+            @Html.ActionLink("Show Details ", "Index", new { type = "Details", productId = Products[i].ProductId }) |
+            @Html.ActionLink("Show OrderLines", "Index", new { type = "OrderLines", productId = Products[i].ProductId })
+        </td>
+    </tr>
         }
 
     </table>
     <button class="btn btn-primary">批次更新</button>
+    <hr />
+    <p>
+        @if (ViewBag.SelectedProductId != null)
+        {
+            if (ViewBag.type == "Details")
+            {
+                @Html.Partial("Details", ViewData["SelectedProductItem"])
+            }
+            else
+            {
+                @Html.Action("Index", "OrderLines", new { ProductId = ViewBag.SelectedProductId })
+            }
+        }        
+    </p>
 }

@@ -43,5 +43,10 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    @RenderSection("TopLinks", required: false)
+    @if (!IsSectionDefined("scripts"))
+    {
+        <script>console.log("fix");</script>
+    }
 </body>
 </html>
