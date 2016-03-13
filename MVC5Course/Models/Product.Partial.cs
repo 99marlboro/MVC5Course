@@ -13,18 +13,16 @@ namespace MVC5Course.Models
     {
         [Required]
         public int ProductId { get; set; }
-               
-        [Required]
-        [RegularExpression(@"\w\w\d{8}", ErrorMessage="請輸入發票號碼")]
-        [必須包含一個空白字元(ErrorMessage="必須包含一個空白字元")]
-        [StringLength(80, ErrorMessage = "欄位長度不得大於 80 個字元")]
+        
+        [StringLength(80, ErrorMessage="欄位長度不得大於 80 個字元")]
+        //[RegularExpression(@"\w\w\d{8}", ErrorMessage = "請輸入發票號碼")]
+        //[必須包含一個空白字元(ErrorMessage = "必須包含一個空白字元")]
         public string ProductName { get; set; }
-        [Required]
         public Nullable<decimal> Price { get; set; }
-        [Required]
         public Nullable<bool> Active { get; set; }
-        [Required]
         public Nullable<decimal> Stock { get; set; }
+        [Required]
+        public bool IsDeleted { get; set; }
     
         public virtual ICollection<OrderLine> OrderLine { get; set; }
     }

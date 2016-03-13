@@ -16,6 +16,7 @@ namespace MVC5Course
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
+                //url: "{controller}/{action}.php/{*id}", HOME/Index/123/56&66mjslkvj 加星號可以取後面所有的參數 Catch All RouteValue 
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }

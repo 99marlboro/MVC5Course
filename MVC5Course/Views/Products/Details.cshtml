@@ -44,6 +44,49 @@
 
     </dl>
 </div>
+
+<hr />
+<h2>OrderLine</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            OrderId
+        </th>
+        <th>
+            LineNumber
+        </th>
+        <th>
+            Qty
+        </th>
+        <th>
+            LineTotal
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.OrderLines)
+    {
+        <tr>
+            <td>
+                @item.OrderId
+            </td>
+            <td>
+                @item.LineNumber
+            </td>
+            <td>
+                @item.Qty
+            </td>
+            <td>
+                @item.LineTotal
+            </td>
+
+        </tr>
+    }
+
+</table>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ProductId }) |
     @Html.ActionLink("Back to List", "Index")
